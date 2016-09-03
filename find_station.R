@@ -73,12 +73,17 @@ print_res <- function(res) {
 }
 
 pcat("HKI")
+pcat("\n")
 print_res(experiment(1, 14, 10))
 pcat("KWW")
+pcat("\n")
 print_res(experiment(2, 9, 13))
 pcat("KWE")
+pcat("\n")
 print_res(experiment(3, 9, 6))
 pcat("NTW")
+pcat("\n")
 print_res(experiment(4, 16, 14))
 pcat("NTE")
+pcat("\n")
 print_res(experiment(5, 19, 10))
