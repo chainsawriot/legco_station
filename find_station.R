@@ -63,10 +63,12 @@ print_res <- function(res) {
     pcat("2012")
     for (x in res[[1]]) {
         pcat(x)
+        cat("\n")
     }
     pcat("2008")
     for (x in res[[2]]) {
         pcat(x)
+        cat("\n")
     }
 }
 
