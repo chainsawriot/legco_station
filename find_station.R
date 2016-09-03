@@ -15,12 +15,8 @@ dice2008 <- function(fname, ncand) {
     return(meat)
 }
 
-meat12 <- dice2012("cs_result_LC5.xls", 19)
-meat08 <- dice2008("counting_results_LC5.xls", 10)
-station16 <- readRDS("lc5_2016.RDS")
-goodstation <- intersect(intersect(meat12$cname, meat08$cname), station16[,2])
-
-greedy <- function(x, goodstation, iteration = 10) {
+greedy <- function(x, goodstation, best = 0.1) {
+    iteration <- ceiling(length(goodstation) * best)
     meat <- x[x$cname %in% goodstation,]
     finalvotes <- apply(x[,4:ncol(x)], 2, sum)
     bag <- c()
@@ -33,10 +29,39 @@ greedy <- function(x, goodstation, iteration = 10) {
     return(meat$cname[bag])
 }
     
-evaluate <- function(stations, y) {
+evaluate <- function(stations, y, plot = FALSE) {
     finalvotes <- apply(y[,4:ncol(y)], 2, sum)
     xvotes <- apply(y[y$cname %in% stations, 4:ncol(y)], 2, sum)
+    if (plot) {
+        plot(finalvotes, xvotes, main = round(cor(finalvotes, xvotes), 3))
+    }
     return(cor(finalvotes, xvotes))
 }
 
-plot(apply(meat12[,4:ncol(meat12)], 2, sum), apply(meat12[meat12$cname %in% meat[bag,2],4:ncol(meat12)], 2, sum))
+experiment <- function(lc = 5, s12 = 19, s08 = 10) {
+    meat12 <- dice2012(paste0("cs_result_LC",lc,".xls"), s12)
+    meat08 <- dice2008(paste0("counting_results_LC", lc, ".xls"), s08)
+    station16 <- readRDS(paste0("lc", lc, "_2016.RDS"))
+    goodstation <- intersect(intersect(meat12$cname, meat08$cname), station16[,2])
+    bstation12 <- greedy(meat12, goodstation)
+    bstation08 <- greedy(meat08, goodstation)
+    #print("best12")
+    #print(bstation12, TRUE)
+    #print("best08")
+    #print(bstation08, TRUE)
+    par(mfrow=c(2,1))
+    evaluate(bstation12, meat08)
+    evaluate(bstation08, meat12)
+    return(list(bstation12, bstation08))
+}
+
+print("HKI")
+experiment(1, 14, 10)
+print("KWW")
+experiment(2, 9, 13)
+print("KWE")
+experiment(3, 9, 6)
+print("NTW")
+experiment(4, 16, 14)
+print("NTE")
+experiment(5, 19, 10)
