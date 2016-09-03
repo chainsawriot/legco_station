@@ -55,13 +55,28 @@ experiment <- function(lc = 5, s12 = 19, s08 = 10) {
     return(list(bstation12, bstation08))
 }
 
-print("HKI")
-experiment(1, 14, 10)
-print("KWW")
-experiment(2, 9, 13)
-print("KWE")
-experiment(3, 9, 6)
-print("NTW")
-experiment(4, 16, 14)
-print("NTE")
-experiment(5, 19, 10)
+pcat <- function(x) {
+    cat(paste0(x, "\n"))
+}
+
+print_res <- function(res) {
+    pcat("2012")
+    for (x in res[[1]]) {
+        pcat(x)
+    }
+    pcat("2008")
+    for (x in res[[2]]) {
+        pcat(x)
+    }
+}
+
+pcat("HKI")
+print_res(experiment(1, 14, 10))
+pcat("KWW")
+print_res(experiment(2, 9, 13))
+pcat("KWE")
+print_res(experiment(3, 9, 6))
+pcat("NTW")
+print_res(experiment(4, 16, 14))
+pcat("NTE")
+print_res(experiment(5, 19, 10))
